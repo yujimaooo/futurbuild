@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHammer } from '@fortawesome/free-solid-svg-icons';
+import { faHammer, faTimes } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import './InvestmentAnalysis.css';
 
@@ -17,6 +17,7 @@ function InvestmentAnalysis() {
   const [debt, setDebt] = useState(initialData.debt);
   const [analysis, setAnalysis] = useState({});
   const [textAnalysis, setTextAnalysis] = useState("No analysis available");
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
 
   useEffect(() => {
     console.log("Location state:", state);
@@ -24,7 +25,7 @@ function InvestmentAnalysis() {
     if (analysisData.choices && analysisData.choices.length > 0 && analysisData.choices[0]?.message?.content) {
       try {
         const content = JSON.parse(analysisData.choices[0].message.content);
-        console.log("Parsed content:", content); // Debug log
+        console.log("Parsed content:", content);
         if (content.analysis) {
           setAnalysis(content.analysis);
           setTextAnalysis(content.textAnalysis || "No analysis available");
@@ -48,11 +49,11 @@ function InvestmentAnalysis() {
         debt
       });
 
-      console.log(response.data);  // Handle the response as needed
+      console.log(response.data);
       if (response.data.choices && response.data.choices.length > 0 && response.data.choices[0]?.message?.content) {
         try {
           const content = JSON.parse(response.data.choices[0].message.content);
-          console.log("Parsed content:", content); // Debug log
+          console.log("Parsed content:", content);
           if (content.analysis) {
             setAnalysis(content.analysis);
             setTextAnalysis(content.textAnalysis || "No analysis available");
@@ -70,100 +71,112 @@ function InvestmentAnalysis() {
     }
   };
 
+  const handleShowFloorPlan = () => {
+    setIsPopupVisible(true);
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupVisible(false);
+  };
+
   return (
     <div className="investment-analysis-page">
-      <div className="left-section">
-        <div className="prompt-section">
-          <div className="prompt-container">
-            <input
-              type="text"
-              className="prompt-input"
-              placeholder="describe your dream home here..."
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-            />
-            <button className="prompt-button" onClick={handleRegenerate}>
-              <FontAwesomeIcon icon={faHammer} />
+      <div className="header">
+      </div>
+      <div className="content">
+        <div className="left-section">
+          <div className="prompt-section">
+            <div className="prompt-container">
+              <input
+                type="text"
+                className="prompt-input"
+                placeholder="describe your dream home here..."
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+              />
+              <button className="prompt-button" onClick={handleRegenerate}>
+                <FontAwesomeIcon icon={faHammer} />
+              </button>
+            </div>
+            <div className="info-container">
+              <div className="info-box">
+                <span>Your Income:</span>
+                <input
+                  type="number"
+                  value={income}
+                  onChange={(e) => setIncome(e.target.value)}
+                  className="info-input"
+                />
+              </div>
+              <div className="info-box">
+                <span>Your Savings:</span>
+                <input
+                  type="number"
+                  value={savings}
+                  onChange={(e) => setSavings(e.target.value)}
+                  className="info-input"
+                />
+              </div>
+              <div className="info-box">
+                <span>Your Debt:</span>
+                <input
+                  type="number"
+                  value={debt}
+                  onChange={(e) => setDebt(e.target.value)}
+                  className="info-input"
+                />
+              </div>
+            </div>
+            <div className="info-tiles">
+              <div className="info-tile">
+                <h3>Loan Recommendation</h3>
+                <p>{analysis.loanRecommendation}</p>
+              </div>
+              <div className="info-tile">
+                <h3>Interest Rate</h3>
+                <p>{analysis.interestRate}%</p>
+              </div>
+              <div className="info-tile">
+                <h3>Financial Health</h3>
+                <p>{analysis.financialHealth}</p>
+              </div>
+              <div className="info-tile">
+                <h3>Risk Assessment</h3>
+                <p>{analysis.riskAssessment}</p>
+              </div>
+              <div className="info-tile">
+                <h3>Down Payment Capability</h3>
+                <p>{analysis.downPaymentCapability}</p>
+              </div>
+              <div className="info-tile">
+                <h3>Debt-to-Income Ratio</h3>
+                <p>{analysis.debtToIncomeRatio}%</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="right-section">
+        <button className="floor-plan-button" onClick={handleShowFloorPlan}>
+          Show 2D Floor Plan
+        </button>
+          <div className="text-analysis">
+            <p>{textAnalysis}</p>
+          </div>
+        </div>
+      </div>
+      {isPopupVisible && (
+        <div className="popup">
+          <div className="popup-content">
+            <button className="close-button" onClick={handleClosePopup}>
+              <FontAwesomeIcon icon={faTimes} />
             </button>
-          </div>
-          <div className="info-container">
-            <div className="info-box">
-              <span>Your Income:</span>
-              <input
-                type="number"
-                value={income}
-                onChange={(e) => setIncome(e.target.value)}
-                className="info-input"
-              />
-            </div>
-            <div className="info-box">
-              <span>Your Savings:</span>
-              <input
-                type="number"
-                value={savings}
-                onChange={(e) => setSavings(e.target.value)}
-                className="info-input"
-              />
-            </div>
-            <div className="info-box">
-              <span>Your Debt:</span>
-              <input
-                type="number"
-                value={debt}
-                onChange={(e) => setDebt(e.target.value)}
-                className="info-input"
-              />
-            </div>
-          </div>
-          <div className="info-tiles">
-            <div className="info-tile">
-              <h3>Loan Recommendation</h3>
-              <p>{analysis.loanRecommendation}</p>
-            </div>
-            <div className="info-tile">
-              <h3>Interest Rate</h3>
-              <p>{analysis.potentialInterestRate}</p>
-            </div>
-            <div className="info-tile">
-              <h3>Financial Health</h3>
-              <p>{analysis.overallFinancialHealth}</p>
-            </div>
-            <div className="info-tile">
-              <h3>Risk Assessment</h3>
-              <p>{analysis.riskAssessment}</p>
-            </div>
-            <div className="info-tile">
-              <h3>Down Payment Capability</h3>
-              <p>${analysis.downPaymentCapability || savings}</p>
-            </div>
-            <div className="info-tile">
-              <h3>Debt-to-Income Ratio</h3>
-              <p>{analysis.debtToIncomeRatio || ((debt / income) * 100).toFixed(2)}%</p>
-            </div>
-            <div className="info-tile">
-              <h3>Estimated Monthly Payment</h3>
-              <p>{analysis.estimatedMonthlyPayment || 'Calculate and display here'}</p>
-            </div>
-            <div className="info-tile">
-              <h3>Credit Score Range</h3>
-              <p>{analysis.creditScoreRange || 'Display credit score range here'}</p>
-            </div>
-            <div className="info-tile">
-              <h3>Loan Term Options</h3>
-              <p>{analysis.loanTermOptions || 'Display loan term options here'}</p>
-            </div>
-            <div className="info-tile">
-              <h3>Property Price Range</h3>
-              <p>{analysis.propertyPriceRange || 'Display property price range here'}</p>
+            <div className="floor-plan">
+              {/* Insert your 2D floor plan content here */}
+              <p>2D Floor Plan will be displayed here.</p>
             </div>
           </div>
         </div>
-      </div>
-      <div className="right-section">
-        <div className="text-analysis">
-          <p>{textAnalysis}</p>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
