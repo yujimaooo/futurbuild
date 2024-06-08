@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHammer } from '@fortawesome/free-solid-svg-icons';
 import './PromptPage.css';
 
 function PromptPage() {
+  const [income, setIncome] = useState(80000);
+  const [savings, setSavings] = useState(40000);
+  const [debt, setDebt] = useState(8000);
+
   return (
     <div className="prompt-page">
       <h1 className="title">Build your future.</h1>
@@ -19,9 +23,33 @@ function PromptPage() {
         </button>
       </div>
       <div className="info-container">
-        <div className="info-box">Your Income: <span>$80,000</span></div>
-        <div className="info-box">Your Savings: <span>$40,000</span></div>
-        <div className="info-box">Your Debt: <span>$8,000</span></div>
+        <div className="info-box">
+          <span>Your Income:</span>
+          $<input
+            type="number"
+            value={income}
+            onChange={(e) => setIncome(e.target.value)}
+            className="info-input"
+          />
+        </div>
+        <div className="info-box">
+          <span>Your Savings:</span>
+          $<input
+            type="number"
+            value={savings}
+            onChange={(e) => setSavings(e.target.value)}
+            className="info-input"
+          />
+            </div>
+            <div className="info-box">
+          <span>Your Debt:</span>
+          $<input
+            type="number"
+            value={debt}
+            onChange={(e) => setDebt(e.target.value)}
+            className="info-input"
+          />
+        </div>
       </div>
     </div>
   );

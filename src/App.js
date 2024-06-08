@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
 import logo from './logo.svg';
 
@@ -11,15 +11,14 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-        </header>
-        <Switch>
+        <Routes>
           {/* Default route */}
-          <Route exact path="/" render={() => <Redirect to="/prompt" />} />
-          <Route path="/prompt" component={PromptPage} />
-          <Route path="/investment-analysis" component={InvestmentAnalysis} />
-        </Switch>
+          <Route path="/" element={<Navigate to="/prompt" />} />
+          {/* PromptPage route */}
+          <Route path="/prompt" element={<PromptPage />} />
+          {/* InvestmentAnalysis route */}
+          <Route path="/investment-analysis" element={<InvestmentAnalysis />} />
+        </Routes>
       </div>
     </Router>
   );
