@@ -22,54 +22,54 @@ function PromptPage() {
       });
 
       console.log(response.data);  // Handle the response as needed
-      navigate('/investment-analysis', { state: { analysis: response.data } });
+      navigate('/investment-analysis', { state: { analysis: response.data, initialData: { prompt, income, savings, debt } } });
     } catch (error) {
       console.error('Error sending prompt to the server:', error);
     }
   };
 
   return (
-    <div className="prompt-page">
-      <h1 className="title">Build your future.</h1>
-      <p className="subtitle">Owning a house should be black and white.</p>
-      <div className="prompt-container">
+    <div className="prompt-page-landing">
+      <h1 className="title-landing">Build your future.</h1>
+      <p className="subtitle-landing">Owning a house should be black and white.</p>
+      <div className="prompt-container-landing">
         <input
           type="text"
-          className="prompt-input"
+          className="prompt-input-landing"
           placeholder="describe your dream home here..."
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
         />
-        <button className="prompt-button" onClick={handleNavigation}>
+        <button className="prompt-button-landing" onClick={handleNavigation}>
           <FontAwesomeIcon icon={faHammer} />
         </button>
       </div>
-      <div className="info-container">
-        <div className="info-box">
+      <div className="info-container-landing">
+        <div className="info-box-landing">
           <span>Your Income:</span>
           <input
             type="number"
             value={income}
             onChange={(e) => setIncome(e.target.value)}
-            className="info-input"
+            className="info-input-landing"
           />
         </div>
-        <div className="info-box">
+        <div className="info-box-landing">
           <span>Your Savings:</span>
           <input
             type="number"
             value={savings}
             onChange={(e) => setSavings(e.target.value)}
-            className="info-input"
+            className="info-input-landing"
           />
         </div>
-        <div className="info-box">
+        <div className="info-box-landing">
           <span>Your Debt:</span>
           <input
             type="number"
             value={debt}
             onChange={(e) => setDebt(e.target.value)}
-            className="info-input"
+            className="info-input-landing"
           />
         </div>
       </div>

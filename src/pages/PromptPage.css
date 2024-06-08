@@ -1,4 +1,4 @@
-.prompt-page {
+.prompt-page-landing {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,17 +8,17 @@
     color: #fff;
   }
   
-  .title {
+  .title-landing {
     font-size: 2.5rem;
     margin-bottom: 0.5rem;
   }
   
-  .subtitle {
+  .subtitle-landing {
     font-size: 1rem;
     margin-bottom: 2rem;
   }
   
-  .prompt-container {
+  .prompt-container-landing {
     display: flex;
     align-items: center;
     background-color: #2e2e2e;
@@ -30,7 +30,7 @@
     box-shadow: 0 0 10px rgba(49, 49, 49, 0.5);
   }
   
-  .prompt-input {
+  .prompt-input-landing {
     flex-grow: 1;
     background: none;
     border: none;
@@ -40,11 +40,11 @@
     padding: 0.5rem;
   }
   
-  .prompt-button {
+  .prompt-button-landing {
     background-color: #ffffff;
     border: none;
     outline: none;
-    color: #fff;
+    color: #8b8787;
     font-size: 1.5rem;
     margin-left: 0.5rem;
     cursor: pointer;
@@ -56,12 +56,12 @@
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
   }
   
-  .info-container {
+  .info-container-landing {
     display: flex;
     gap: 1rem;
   }
   
-  .info-box {
+  .info-box-landing {
     background-color: #2e2e2e;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
@@ -72,11 +72,11 @@
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
   }
   
-  .info-box span {
+  .info-box-landing span {
     margin-right: 0.5rem;
   }
   
-  .info-input {
+  .info-input-landing {
     background: none;
     border: none;
     outline: none;
@@ -86,7 +86,7 @@
     text-align: center;
   }
   
-  .info-box:focus-within {
+  .info-box-landing:focus-within {
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
   }
   
