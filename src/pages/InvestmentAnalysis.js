@@ -132,6 +132,30 @@ function InvestmentAnalysis() {
               <h3>Risk Assessment</h3>
               <p>{analysis.riskAssessment}</p>
             </div>
+            <div className="info-tile">
+              <h3>Down Payment Capability</h3>
+              <p>${analysis.downPaymentCapability || savings}</p>
+            </div>
+            <div className="info-tile">
+              <h3>Debt-to-Income Ratio</h3>
+              <p>{analysis.debtToIncomeRatio || ((debt / income) * 100).toFixed(2)}%</p>
+            </div>
+            <div className="info-tile">
+              <h3>Estimated Monthly Payment</h3>
+              <p>{analysis.estimatedMonthlyPayment || 'Calculate and display here'}</p>
+            </div>
+            <div className="info-tile">
+              <h3>Credit Score Range</h3>
+              <p>{analysis.creditScoreRange || 'Display credit score range here'}</p>
+            </div>
+            <div className="info-tile">
+              <h3>Loan Term Options</h3>
+              <p>{analysis.loanTermOptions || 'Display loan term options here'}</p>
+            </div>
+            <div className="info-tile">
+              <h3>Property Price Range</h3>
+              <p>{analysis.propertyPriceRange || 'Display property price range here'}</p>
+            </div>
           </div>
         </div>
       </div>
