@@ -37,10 +37,10 @@
   }
   
   .prompt-button {
-    background-color: #3e3e3e;
+    background-color: #ffffff;
     border: none;
     outline: none;
-    color: #fff;
+    color: #8b8787;
     font-size: 1.5rem;
     margin-left: 0.5rem;
     cursor: pointer;
@@ -126,5 +126,19 @@
     padding: 1rem;
     border-radius: 0.5rem;
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    text-align: left;
+  }
+
+  .council-analysis {
+    background-color: #2e2e2e;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    margin-top: 50px;
+    text-align: left;
   }
   
+  .error-message {
+    color: red;
+    padding: 10px;
+  }

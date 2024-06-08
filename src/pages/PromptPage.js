@@ -9,6 +9,7 @@ function PromptPage() {
   const [income, setIncome] = useState(80000);
   const [savings, setSavings] = useState(40000);
   const [debt, setDebt] = useState(8000);
+  const [suburb, setSuburb] = useState("Surry Hills");
   const [prompt, setPrompt] = useState('');
   const navigate = useNavigate();
 
@@ -18,11 +19,12 @@ function PromptPage() {
         prompt,
         income,
         savings,
-        debt
+        debt,
+        suburb
       });
 
       console.log(response.data);  // Handle the response as needed
-      navigate('/investment-analysis', { state: { analysis: response.data, initialData: { prompt, income, savings, debt } } });
+      navigate('/investment-analysis', { state: { analysis: response.data, initialData: { prompt, income, savings, debt, suburb } } });
     } catch (error) {
       console.error('Error sending prompt to the server:', error);
     }
@@ -69,6 +71,15 @@ function PromptPage() {
             type="number"
             value={debt}
             onChange={(e) => setDebt(e.target.value)}
+            className="info-input-landing"
+          />
+        </div>
+        <div className="info-box-landing">
+          <span>Suburb to Build:</span>
+          <input
+            type="text"
+            value={suburb}
+            onChange={(e) => setSuburb(e.target.value)}
             className="info-input-landing"
           />
         </div>

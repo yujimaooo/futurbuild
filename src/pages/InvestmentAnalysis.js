@@ -15,8 +15,12 @@ function InvestmentAnalysis() {
   const [income, setIncome] = useState(initialData.income);
   const [savings, setSavings] = useState(initialData.savings);
   const [debt, setDebt] = useState(initialData.debt);
+  const [locationInput, setLocationInput] = useState(initialData.location);
+  const [priceRange, setPriceRange] = useState(initialData.priceRange);
   const [analysis, setAnalysis] = useState({});
   const [textAnalysis, setTextAnalysis] = useState("No analysis available");
+  const [councilRegulations, setCouncilRegulations] = useState("No regulations information available");
+  const [error, setError] = useState('');
 
   useEffect(() => {
     console.log("Location state:", state);
@@ -28,6 +32,7 @@ function InvestmentAnalysis() {
         if (content.analysis) {
           setAnalysis(content.analysis);
           setTextAnalysis(content.textAnalysis || "No analysis available");
+          setCouncilRegulations(content.councilRegulations.replace(/\n/g, '<br>') || "No regulations information available");
         } else {
           console.error("No analysis found in the content");
         }
@@ -41,11 +46,13 @@ function InvestmentAnalysis() {
 
   const handleRegenerate = async () => {
     try {
+      setError(''); // Clear previous errors
       const response = await axios.post('http://localhost:8000/analyze', {
         prompt,
         income,
         savings,
-        debt
+        debt,
+        suburb: locationInput,
       });
 
       console.log(response.data);  // Handle the response as needed
@@ -56,17 +63,21 @@ function InvestmentAnalysis() {
           if (content.analysis) {
             setAnalysis(content.analysis);
             setTextAnalysis(content.textAnalysis || "No analysis available");
+            setCouncilRegulations(content.councilRegulations.replace(/\n/g, '<br>') || "No regulations information available");
           } else {
             console.error("No analysis found in the content");
           }
         } catch (error) {
           console.error("Error parsing JSON content:", error);
+          setError('Error parsing the response from the server.');
         }
       } else {
         console.error("Choices are not properly defined or message content is missing");
+        setError('The server response was not properly defined.');
       }
     } catch (error) {
       console.error('Error sending prompt to the server:', error);
+      setError('Error sending the request to the server.');
     }
   };
 
@@ -86,6 +97,7 @@ function InvestmentAnalysis() {
               <FontAwesomeIcon icon={faHammer} />
             </button>
           </div>
+          {error && <div className="error-message">{error}</div>}
           <div className="info-container">
             <div className="info-box">
               <span>Your Income:</span>
@@ -114,47 +126,37 @@ function InvestmentAnalysis() {
                 className="info-input"
               />
             </div>
+            <div className="info-box">
+              <span>Suburb:</span>
+              <input
+                type="text"
+                value={locationInput}
+                onChange={(e) => setLocationInput(e.target.value)}
+                className="info-input"
+              />
+            </div>
+
           </div>
           <div className="info-tiles">
             <div className="info-tile">
-              <h3>Loan Recommendation</h3>
-              <p>{analysis.loanRecommendation}</p>
+              <h3>Loan Amount</h3>
+              <p>${analysis.loanAmount ? analysis.loanAmount.toLocaleString() : 'N/A'}</p>
             </div>
             <div className="info-tile">
-              <h3>Interest Rate</h3>
-              <p>{analysis.potentialInterestRate}</p>
+              <h3>Total Project Cost</h3>
+              <p>${analysis.totalProjectCost ? analysis.totalProjectCost.toLocaleString() : 'N/A'}</p>
             </div>
             <div className="info-tile">
-              <h3>Financial Health</h3>
-              <p>{analysis.overallFinancialHealth}</p>
+              <h3>Annual Interest Rate</h3>
+              <p>{analysis.annualInterestRate ? parseFloat(analysis.annualInterestRate).toFixed(2) : 'N/A'}%</p>
             </div>
             <div className="info-tile">
-              <h3>Risk Assessment</h3>
-              <p>{analysis.riskAssessment}</p>
+              <h3>Monthly Repayments</h3>
+              <p>${analysis.monthlyRepayment ? analysis.monthlyRepayment.toLocaleString() : 'N/A'}</p>
             </div>
             <div className="info-tile">
-              <h3>Down Payment Capability</h3>
-              <p>${analysis.downPaymentCapability || savings}</p>
-            </div>
-            <div className="info-tile">
-              <h3>Debt-to-Income Ratio</h3>
-              <p>{analysis.debtToIncomeRatio || ((debt / income) * 100).toFixed(2)}%</p>
-            </div>
-            <div className="info-tile">
-              <h3>Estimated Monthly Payment</h3>
-              <p>{analysis.estimatedMonthlyPayment || 'Calculate and display here'}</p>
-            </div>
-            <div className="info-tile">
-              <h3>Credit Score Range</h3>
-              <p>{analysis.creditScoreRange || 'Display credit score range here'}</p>
-            </div>
-            <div className="info-tile">
-              <h3>Loan Term Options</h3>
-              <p>{analysis.loanTermOptions || 'Display loan term options here'}</p>
-            </div>
-            <div className="info-tile">
-              <h3>Property Price Range</h3>
-              <p>{analysis.propertyPriceRange || 'Display property price range here'}</p>
+              <h3>Cost Variation</h3>
+              <p>${analysis.costVariation ? analysis.costVariation.toLocaleString() : 'N/A'}</p>
             </div>
           </div>
         </div>
@@ -162,6 +164,10 @@ function InvestmentAnalysis() {
       <div className="right-section">
         <div className="text-analysis">
           <p>{textAnalysis}</p>
+        </div>
+        <div className="council-analysis">
+          <h3>Council Regulations</h3>
+          <p dangerouslySetInnerHTML={{ __html: councilRegulations }} />
         </div>
       </div>
     </div>

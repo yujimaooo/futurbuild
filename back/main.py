@@ -24,115 +24,63 @@ class PromptRequest(BaseModel):
     income: float
     savings: float
     debt: float
-    location: str
-    price_range: str
+    suburb: str
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-DOMAIN_API_KEY = os.getenv("DOMAIN_API_KEY")
 if not GROQ_API_KEY:
     raise ValueError("GROQ_API_KEY environment variable not set")
-if not DOMAIN_API_KEY:
-    raise ValueError("DOMAIN_API_KEY environment variable not set")
 print(f"GROQ_API_KEY: {GROQ_API_KEY}")  # Debugging line
-print(f"DOMAIN_API_KEY: {DOMAIN_API_KEY}")  # Debugging line
 
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
-DOMAIN_API_URL = "https://api.domain.com.au/v1/listings/residential/_search"
 MODEL_ID = "mixtral-8x7b-32768"
 
-def get_commbank_data():
-    commbank_api_url = 'https://api.commbank.com.au/endpoint'  # Replace with the actual CommBank API endpoint
-
-    headers = {
-        'Authorization': f'Bearer {DOMAIN_API_KEY}',
-        'Content-Type': 'application/json'
-    }
-
-    try:
-        response = requests.get(commbank_api_url, headers=headers)
-        response.raise_for_status()
-        return response.json()
-    except requests.exceptions.HTTPError as http_err:
-        print(f"HTTP error occurred: {http_err}")
-        return None
-    except Exception as err:
-        print(f"Other error occurred: {err}")
-        return None
-
-def get_domain_listings(location: str, price_range: str):
-    headers = {
-        'Authorization': f'Bearer {DOMAIN_API_KEY}',
-        'Content-Type': 'application/json'
-    }
-    min_price, max_price = map(int, price_range.split('-'))
-    data = {
-        "listingType": "Sale",
-        "minPrice": min_price,
-        "maxPrice": max_price,
-        "locations": [
-            {
-                "state": "NSW",  # Adjust based on your needs
-                "suburb": location,
-                "includeSurroundingSuburbs": True
-            }
-        ]
-    }
-
-    try:
-        response = requests.post(DOMAIN_API_URL, headers=headers, json=data)
-        response.raise_for_status()
-        return response.json()
-    except requests.exceptions.HTTPError as http_err:
-        print(f"HTTP error occurred: {http_err}")
-        return None
-    except Exception as err:
-        print(f"Other error occurred: {err}")
-        return None
-
 @app.post("/analyze")
-async def analyze(prompt_request: PromptRequest):
-    commbank_data = get_commbank_data()
-    if commbank_data is None:
-        raise HTTPException(status_code=500, detail="Failed to fetch data from CommBank API")
-
-    domain_data = get_domain_listings(prompt_request.location, prompt_request.price_range)
-    if domain_data is None:
-        raise HTTPException(status_code=500, detail="Failed to fetch data from Domain API")
-
+async def analyze(prompt_request: PromptRequest):   
     headers = {
         "Authorization": f"Bearer {GROQ_API_KEY}",
         "Content-Type": "application/json"
     }
+
+    # Log the suburb and prompt
+    print(f"Suburb: {prompt_request.suburb}")
+    print(f"Prompt: {prompt_request.prompt}")
+
+    # Assume these calculations are placeholders for actual logic
+    loan_amount = (prompt_request.income - prompt_request.debt) * 4
+    total_project_cost = loan_amount + prompt_request.savings
+    interest_rate = 4.5  # Example static rate
+    monthly_repayment = (loan_amount * (interest_rate / 100)) / 12
+    cost_variation = total_project_cost * 0.1
 
     data = {
         "model": MODEL_ID,
         "messages": [
             {"role": "system", "content": "You are an AI assistant specialized in real estate investment analysis. Provide the response in JSON format."},
             {"role": "user", "content": (
-                f"Analyze the following financial data and provide a detailed analysis as a JSON object: "
+                f"Analyze the following financial data and project description, and provide a detailed analysis as a JSON object: "
+                f"Project description: {prompt_request.prompt} in {prompt_request.suburb}.\n"
                 f"Annual income: ${prompt_request.income}, Savings: ${prompt_request.savings}, Debt: ${prompt_request.debt}. "
-                f"Consider the user's ability to obtain a loan, potential interest rate, and overall financial health. "
-                f"Calculate and include the down payment capability, debt-to-income ratio, estimated monthly payment, possible credit score range, loan term options, and property price range. "
-                f"Also provide a brief text analysis. The response should be in the following JSON format: "
+                f"Calculate the loan amount the user can achieve with their financials, as well as the total project cost, annual interest rate, monthly repayments (assuming a 30-year loan), and the potential cost variation. All relevant values should be in $'s."
+                f"Also provide a specific outline of applications the investor might need to take with the local council in {prompt_request.suburb} (which will be given to you in the suburb value, assume the state from this suburb) (Australian) which will be defined. Identify which state or city the user is in to determine what legislations relate to their situation and any approvals they need to build this project. Do not give them an ambiguous recommendation like 'Talk to your local council' or 'Comply Fire and Safety Standards', you need to define the specific application they must complete and if you don't know don't say it. The format for the council regulations field should be succinct and to the point, in ONLY DOT POINTS."
+                f"The response should be in the following JSON format: "
                 "{{"
                 "\"analysis\": {{"
                 "\"annualIncome\": {prompt_request.income},"
                 "\"savings\": {prompt_request.savings},"
                 "\"debt\": {prompt_request.debt},"
+                "\"loanAmount\": {loan_amount},"
+                "\"totalProjectCost\": {total_project_cost},"
+                "\"annualInterestRate\": \"{interest_rate}%\","
+                "\"monthlyRepayment\": {monthly_repayment},"
+                "\"costVariation\": {cost_variation},"
                 "\"loanRecommendation\": \"[value]\","
-                "\"potentialInterestRate\": \"[value]\","
+                "\"potentialInterestRate\": \"{interest_rate}%\","
                 "\"overallFinancialHealth\": \"[value]\","
-                "\"riskAssessment\": \"[value]\","
-                "\"downPaymentCapability\": \"[value]\","
-                "\"debtToIncomeRatio\": \"[value]\","
-                "\"estimatedMonthlyPayment\": \"[value]\","
-                "\"creditScoreRange\": \"[value]\","
-                "\"loanTermOptions\": \"[value]\","
-                "\"propertyPriceRange\": \"[value]\""
+                "\"riskAssessment\": \"[value]\""
                 "}},"
-                "\"textAnalysis\": \"[text analysis]\""
-                "}},"
-                f"CommBank data: {commbank_data}, Domain data: {domain_data}"
+                "\"textAnalysis\": \"[text analysis]\","
+                "\"councilRegulations\": \"- [regulation 1]\\n- [regulation 2]\\n- [regulation 3]\""
+                "}}"
             )}
         ],
         "response_format": {"type": "json_object"}
