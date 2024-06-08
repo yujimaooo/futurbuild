@@ -78,7 +78,7 @@ function InvestmentAnalysis() {
             <input
               type="text"
               className="prompt-input"
-              placeholder="describe your dream home here..."
+              placeholder="describe what you want to build here..."
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
             />

@@ -36,7 +36,7 @@ function PromptPage() {
         <input
           type="text"
           className="prompt-input-landing"
-          placeholder="describe your dream home here..."
+          placeholder="describe what you want to build here..."
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
         />
