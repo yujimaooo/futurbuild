@@ -6,13 +6,21 @@
     color: #fff;
   }
   
-  .prompt-section {
+  .left-section {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
     padding: 2rem;
     width: 50%;
+  }
+  
+  .prompt-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
   }
   
   .prompt-container {
@@ -55,6 +63,7 @@
   .info-container {
     display: flex;
     gap: 1rem;
+    flex-wrap: wrap;
   }
   
   .info-box {
@@ -125,5 +134,14 @@
   .info-tile p {
     margin: 0;
     font-size: 1.25rem;
+  }
+  
+  .right-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 2rem;
+    width: 50%;
   }
   

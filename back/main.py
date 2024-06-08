@@ -48,7 +48,19 @@ async def analyze(prompt_request: PromptRequest):
                 f"Analyze the following financial data and provide a detailed analysis as a JSON object: "
                 f"Annual income: ${prompt_request.income}, Savings: ${prompt_request.savings}, Debt: ${prompt_request.debt}. "
                 f"Consider the user's ability to obtain a loan, potential interest rate, and overall financial health. "
-                f"Also provide a brief text analysis. {prompt_request.prompt}"
+                f"Also provide a brief text analysis. The response should be in the following JSON format: "
+                "{"
+                "\"analysis\": {"
+                "\"annualIncome\": \"[value]\","
+                "\"savings\": \"[value]\","
+                "\"debt\": \"[value]\","
+                "\"loanRecommendation\": \"[value]\","
+                "\"potentialInterestRate\": \"[value]\","
+                "\"overallFinancialHealth\": \"[value]\","
+                "\"riskAssessment\": \"[value]\""
+                "},"
+                "\"textAnalysis\": \"[text analysis]\""
+                "}"
             )}
         ],
         "response_format": {"type": "json_object"}
