@@ -1,13 +1,42 @@
 .investment-analysis-page {
     display: flex;
     height: 100vh;
-    background-color: #1c1c1c;
+    background-color: #1C1C1C;
     color: #fff;
+    flex-direction: column;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem;
+    background-color: #1C1C1C;
+  }
+  
+  .floor-plan-button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .floor-plan-button:hover {
+    background-color: #0056B3;
+  }
+  
+  .content {
+    display: flex;
+    flex: 1;
   }
   
   .left-section, .right-section {
     flex: 1;
     padding: 2rem;
+    display: flex;
+    flex-direction: column;
   }
   
   .prompt-section {
@@ -19,7 +48,7 @@
   .prompt-container {
     display: flex;
     align-items: center;
-    background-color: #2e2e2e;
+    background-color: #2E2E2E;
     border-radius: 0.5rem;
     padding: 0.5rem;
     min-width: 100%;
@@ -37,10 +66,10 @@
   }
   
   .prompt-button {
-    background-color: #ffffff;
+    background-color: #3E3E3E;
     border: none;
     outline: none;
-    color: #8b8787;
+    color: #fff;
     font-size: 1.5rem;
     margin-left: 0.5rem;
     cursor: pointer;
@@ -60,7 +89,7 @@
   }
   
   .info-box {
-    background-color: #2e2e2e;
+    background-color: #2E2E2E;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     display: flex;
@@ -97,7 +126,7 @@
   }
   
   .info-tile {
-    background-color: #2e2e2e;
+    background-color: #2E2E2E;
     padding: 1rem;
     border-radius: 0.5rem;
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
@@ -122,23 +151,64 @@
   }
   
   .text-analysis {
-    background-color: #2e2e2e;
+    background-color: #2E2E2E;
     padding: 1rem;
     border-radius: 0.5rem;
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-    text-align: left;
+    margin-top: 2rem;
   }
-
-  .council-analysis {
-    background-color: #2e2e2e;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-    margin-top: 50px;
-    text-align: left;
+  
+  /* Popup styles */
+  .popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .popup-content {
+    background-color: #fff;
+    color: #000;
+    padding: 2rem;
+    border-radius: 10px;
+    position: relative;
+    width: 80%;
+    max-width: 600px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .floor-plan {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px; /* Adjust as needed */
   }
   
   .error-message {
     color: red;
-    padding: 10px;
+    margin-top: 10px;
+  }
+  
+  .council-analysis {
+    background-color: #2E2E2E;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    margin-top: 2rem;
   }
