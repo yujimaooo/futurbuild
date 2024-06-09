@@ -66,10 +66,10 @@
   }
   
   .prompt-button {
-    background-color: #3E3E3E;
+    background-color: #fff;
     border: none;
     outline: none;
-    color: #fff;
+    color: #3E3E3E;
     font-size: 1.5rem;
     margin-left: 0.5rem;
     cursor: pointer;
@@ -156,6 +156,7 @@
     border-radius: 0.5rem;
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
     margin-top: 2rem;
+    text-align: left;
   }
   
   /* Popup styles */
@@ -211,4 +212,5 @@
     border-radius: 0.5rem;
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
     margin-top: 2rem;
+    text-align: left;
   }

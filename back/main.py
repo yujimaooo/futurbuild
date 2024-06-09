@@ -51,6 +51,7 @@ async def analyze(prompt_request: PromptRequest):
     interest_rate = 4.5  # Example static rate
     monthly_repayment = (loan_amount * (interest_rate / 100)) / 12
     cost_variation = total_project_cost * 0.1
+    project_duration = 2  # Example project duration in years
 
     data = {
         "model": MODEL_ID,
@@ -59,8 +60,8 @@ async def analyze(prompt_request: PromptRequest):
             {"role": "user", "content": (
                 f"Analyze the following financial data and project description, and provide a detailed analysis as a JSON object: "
                 f"Project description: {prompt_request.prompt} in {prompt_request.suburb}. Take into deep consideration the suburb given here as project costs vary heavily based off of it.\n"
-                f"Annual income: ${prompt_request.income}, Savings: ${prompt_request.savings}, Debt: ${prompt_request.debt}. "
-                f"Calculate the loan amount the user can achieve with their financials, as well as the total project cost, annual interest rate, monthly repayments (assuming a 30-year loan), and the potential cost variation. All relevant values should be in $'s."
+                f"Detials about the Investor: Annual income: ${prompt_request.income}, Savings: ${prompt_request.savings}, Debt: ${prompt_request.debt}. "
+                f"Calculate the MAXIMUM loan amount the user can achieve with their financials, as well as the total project cost based off of property prices in {prompt_request.suburb} and the size of the project given in the prompt, annual interest rate on the loan, monthly repayments (assuming a 30-year loan), and the potential cost variation (in dollar value either way) based off of how volatile the project seems. Also return the project duration, which should be how many years you'd think it should takes to build the project (THIS IS NOT THE LOAN LENGTH). All relevant values should be in $'s."
                 f"Also provide a specific outline of applications the investor might need to take with the local council in {prompt_request.suburb} (which will be given to you in the suburb value, assume the state from this suburb) (Australian) which will be defined. Identify which state or city the user is in to determine what legislations relate to their situation and any approvals they need to build this project. Do not give them an ambiguous recommendation like 'Talk to your local council' or 'Comply Fire and Safety Standards', you need to define the specific application they must complete and if you don't know don't say it. The format for the council regulations field should be succinct and to the point, in ONLY DOT POINTS."
                 f"The response should be in the following JSON format: "
                 "{{"
@@ -73,6 +74,7 @@ async def analyze(prompt_request: PromptRequest):
                 "\"annualInterestRate\": \"{interest_rate}%\","
                 "\"monthlyRepayment\": {monthly_repayment},"
                 "\"costVariation\": {cost_variation},"
+                "\"projectDuration\": {project_duration},"
                 "\"loanRecommendation\": \"[value]\","
                 "\"potentialInterestRate\": \"{interest_rate}%\","
                 "\"overallFinancialHealth\": \"[value]\","

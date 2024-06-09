@@ -15,7 +15,7 @@ function InvestmentAnalysis() {
   const [income, setIncome] = useState(initialData.income);
   const [savings, setSavings] = useState(initialData.savings);
   const [debt, setDebt] = useState(initialData.debt);
-  const [locationInput, setLocationInput] = useState(initialData.location);
+  const [locationInput, setLocationInput] = useState(initialData.suburb);
   const [priceRange, setPriceRange] = useState(initialData.priceRange);
   const [analysis, setAnalysis] = useState({});
   const [textAnalysis, setTextAnalysis] = useState("No analysis available");
@@ -293,12 +293,16 @@ function InvestmentAnalysis() {
                 <p>{analysis.annualInterestRate ? parseFloat(analysis.annualInterestRate).toFixed(2) : 'N/A'}%</p>
               </div>
               <div className="info-tile">
-                <h3>Monthly Repayments</h3>
+                <h3>Monthly Repayments (30yr Loan)</h3>
                 <p>${analysis.monthlyRepayment ? analysis.monthlyRepayment.toLocaleString() : 'N/A'}</p>
               </div>
               <div className="info-tile">
                 <h3>Cost Variation</h3>
                 <p>${analysis.costVariation ? analysis.costVariation.toLocaleString() : 'N/A'}</p>
+              </div>
+              <div className="info-tile">
+                <h3>Project Duration</h3>
+                <p>{analysis.projectDuration ? `${analysis.projectDuration} years` : 'N/A'}</p>
               </div>
             </div>
           </div>

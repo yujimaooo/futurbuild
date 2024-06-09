@@ -6,14 +6,16 @@ import axios from 'axios';
 import './PromptPage.css';
 
 function PromptPage() {
-  const [income, setIncome] = useState(80000);
-  const [savings, setSavings] = useState(40000);
-  const [debt, setDebt] = useState(8000);
-  const [suburb, setSuburb] = useState("Surry Hills");
+  const [income, setIncome] = useState(0);
+  const [savings, setSavings] = useState(0);
+  const [debt, setDebt] = useState(0);
+  const [suburb, setSuburb] = useState("");
   const [prompt, setPrompt] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleNavigation = async () => {
+    setLoading(true);
     try {
       const response = await axios.post('http://localhost:8000/analyze', {
         prompt,
@@ -27,6 +29,8 @@ function PromptPage() {
       navigate('/investment-analysis', { state: { analysis: response.data, initialData: { prompt, income, savings, debt, suburb } } });
     } catch (error) {
       console.error('Error sending prompt to the server:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -42,8 +46,12 @@ function PromptPage() {
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
         />
-        <button className="prompt-button-landing" onClick={handleNavigation}>
-          <FontAwesomeIcon icon={faHammer} />
+        <button className="prompt-button-landing" onClick={handleNavigation} disabled={loading}>
+          {loading ? (
+            <div className="spinner"></div>
+          ) : (
+            <FontAwesomeIcon icon={faHammer} />
+          )}
         </button>
       </div>
       <div className="info-container-landing">
@@ -89,3 +97,4 @@ function PromptPage() {
 }
 
 export default PromptPage;
+  
